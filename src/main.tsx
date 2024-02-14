@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import './index.css'
-import { Link, RouterProvider, createBrowserRouter, defer } from 'react-router-dom';
+import { Link, Params, RouterProvider, createBrowserRouter, defer } from 'react-router-dom';
 import Root from './layouts/Root.tsx';
 import Signup from './routes/Signup.tsx';
 import Login from './routes/Login.tsx';
@@ -60,44 +60,24 @@ const router = createBrowserRouter([
             // }
 
             //Code below gets all polls
-            loader: () => {
-              const appwrite = new Appwrite()
-              let result = appwrite.getAllPolls()
-
-              return defer({ result })
-            },
+            loader: () => getAllPolls(),
             handle: {
               crumb: () => <Link to="/dashboard/poll">Polls</Link>
             },
-            children: [
-              
-            ]
           },
           {
-            path: "poll/create-poll",
+            path: "poll/create",
             element: <CreatePoll />
           },
           {
             path: "poll/:pollID/vote",
             element: <MakeVote />,
-            loader: ({ request, params }) => {
-              const appwrite = new Appwrite()
-              console.log(request)
-              let result = appwrite.getPoll(params.pollID!)
-
-              return defer({ result })
-            }
+            loader: ({ request, params }) => getPoll(params)
           },
           {
             path: "poll/:pollID",
             element: <PollDetails />,
-            loader: ({ request, params }) => {
-              const appwrite = new Appwrite()
-              console.log(request)
-              let result = appwrite.getFullPollData(params.pollID!)
-
-              return defer({ result })
-            },
+            loader: ({ request, params }) => getFullPollData(params),
             handle: {
               crumb: () => <Link to="/dashboard/poll/:pollID">Poll Details</Link>
             }
@@ -117,6 +97,25 @@ const router = createBrowserRouter([
 
 
 ]);
+
+function getAllPolls() {
+  const appwrite = new Appwrite();
+  let result = appwrite.getAllPolls();
+  return defer({ result });
+}
+
+function getFullPollData(params: Params) {
+  const appwrite = new Appwrite();
+  let result = appwrite.getFullPollData(params.pollID!);
+  return defer({ result });
+}
+
+function getPoll(params: Params) {
+  const appwrite = new Appwrite();
+  let result = appwrite.getPoll(params.pollID!);
+  return defer({ result });
+}
+
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>

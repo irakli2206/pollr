@@ -7,6 +7,7 @@ import { Popover, Transition } from '@headlessui/react';
 import { TbLogout } from "react-icons/tb";
 import Appwrite from '../services/Appwrite';
 import { HiChevronLeft, HiChevronRight } from "react-icons/hi";
+import { IoLogoSlack } from "react-icons/io5";
 
 const DashboardSidebar = () => {
   const navigate = useNavigate()
@@ -44,7 +45,7 @@ const DashboardSidebar = () => {
     <nav className='flex flex-col border-r border-r-gray-200 h-full w-full max-w-72'>
       <header className="flex p-4 px-10 justify-between border-b relative border-b-gray-200">
         <div className="flex gap-3 items-center">
-          <div className="w-8 h-8 bg-black rounded-md"></div>
+          <div className="w-8 h-8 bg-black rounded-md flex items-center justify-center"><IoLogoSlack className='text-white'/></div>
           <h1 className='text-black text-lg font-bold '>Pollr</h1>
         </div>
 

@@ -24,12 +24,12 @@ const Polls = () => {
   let navigate = useNavigate()
 
   const gotoCreatePoll = () => {
-    navigate("create-poll")
+    navigate("create")
   }
 
 
   return (
-    <div className='h-full w-full'>
+    <div className='w-full '>
       <React.Suspense
         fallback={<Spinner />}
 

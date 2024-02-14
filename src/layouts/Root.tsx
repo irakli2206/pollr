@@ -16,7 +16,7 @@ const Root = () => {
         getCurrentSession()
     }, [])
     return (
-        <main className='flex flex-col min-h-screen'>
+        <main className='flex flex-col h-screen  !max-h-screen'>
             <Suspense fallback={<OverlaySpinner />}>
                 <Outlet />
             </Suspense>

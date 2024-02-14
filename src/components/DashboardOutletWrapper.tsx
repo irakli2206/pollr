@@ -7,7 +7,7 @@ type Props = {
 
 const DashboardOutletWrapper = ({ children }: Props) => {
     return (
-        <div className='p-8 bg-gray-50 w-full h-full'>
+        <div className='py-4 bg-gray-50 w-full '>
             <Suspense fallback={<Spinner />}>
                 {children}
             </Suspense>
