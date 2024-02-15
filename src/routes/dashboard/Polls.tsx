@@ -10,16 +10,17 @@ const appwrite = new Appwrite()
 
 
 const Polls = () => {
-  const [user, setUser] = useState<Models.Document | undefined>()
+  // const [user, setUser] = useState<Models.Document | undefined>()
 
-  useEffect(() => {
-    const getUser = async () => {
-      const currentUser = await appwrite.getCurrentAuthUser()
-      setUser(currentUser as any)
-    }
+ 
+  // useEffect(() => {
+  //   const getUser = async () => {
+  //     const currentUser = await appwrite.getCurrentAuthUser()
+  //     setUser(currentUser as any)
+  //   }
 
-    getUser()
-  }, [])
+  //   getUser()
+  // }, [])
 
   let navigate = useNavigate()
 
@@ -29,14 +30,14 @@ const Polls = () => {
 
 
   return (
-    <div className='w-full '>
+    <div className='w-full flex flex-col items-center'>
       <React.Suspense
         fallback={<Spinner />}
 
       >
         {/* <Spinner /> */}
-        <PollList user={user} />
-        <LightButton className='mt-2' title='Create Poll' onClick={gotoCreatePoll} />
+        <PollList />
+        <LightButton className='mt-4 min-w-48 mx-auto' title='Create Poll' onClick={gotoCreatePoll} />
       </React.Suspense>
     </div>
   )

@@ -60,7 +60,7 @@ const router = createBrowserRouter([
             // }
 
             //Code below gets all polls
-            loader: () => getAllPolls(),
+            loader: () => getPollsData(),
             handle: {
               crumb: () => <Link to="/dashboard/poll">Polls</Link>
             },
@@ -97,6 +97,15 @@ const router = createBrowserRouter([
 
 
 ]);
+
+function getPollsData() {
+  const appwrite = new Appwrite();
+  let getAllPolls = appwrite.getAllPolls();
+  let getUserData = appwrite.getCurrentUser();
+  let getVotablePolls = appwrite.getVotablePolls();
+  let result = Promise.all([getAllPolls, getVotablePolls, getUserData])
+  return defer({ result })
+}
 
 function getAllPolls() {
   const appwrite = new Appwrite();

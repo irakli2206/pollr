@@ -82,7 +82,6 @@ class Appwrite {
     async checkSessionExists() {
         try {
             let currentSession = await this.account.getSession('current')
-            console.log(currentSession)
             if (currentSession) return true
             else return false
         } catch (e) {
@@ -146,7 +145,7 @@ class Appwrite {
 
     async getUserPolls(userID: string) {
         try {
-            return await this.database.listDocuments(DATABASE_ID, 'polls', [Query.equal("owner", userID)])
+            return (await this.database.listDocuments(DATABASE_ID, 'polls', [Query.equal("owner", userID)])).documents
         } catch (e) {
             throw "Appwrite Service :: getUserPolls :: " + e
         }
@@ -154,7 +153,7 @@ class Appwrite {
 
     async getAllPolls() {
         try {
-            return await this.database.listDocuments(DATABASE_ID, 'polls')
+            return (await this.database.listDocuments(DATABASE_ID, 'polls')).documents
         } catch (e) {
             throw "Appwrite Service :: getAllPolls :: " + e
         }
@@ -188,6 +187,20 @@ class Appwrite {
         }
     }
 
+    //We filter out the polls where we had already voted
+    async getVotablePolls() {
+        try {
+            let currentUser = await this.getCurrentUser()
+            let allPolls = await this.getAllPolls()
+            let myVotes = await this.getMyVotes(currentUser.$id)
+            let votePollIDs = myVotes.documents.map(vote => vote.poll.$id)
+            //If poll was not made by us or if we already voted for poll, we cannot vote for the poll
+            let votablePolls = allPolls.filter((poll: any) => !votePollIDs.includes(poll.$id) && poll.owner.$id !== currentUser.$id)
+            return votablePolls
+        } catch (e) {
+            throw "Appwrite Service :: getVotablePolls :: " + e
+        }
+    }
 
     async makeVote({ optionID, pollID, userID }: MakeVoteT) {
         try {
@@ -200,8 +213,17 @@ class Appwrite {
             throw "Appwrite Service :: makeVote :: " + e
         }
     }
+    
 
+    async getMyVotes(userID: string) {
 
+        try {
+            let myVotes = await this.database.listDocuments(DATABASE_ID, 'votes', [Query.equal('user', userID)])
+            return myVotes
+        } catch (e) {
+            throw "Appwrite Service :: getMyVotes :: " + e
+        }
+    }
 
 
     //Executes Appwrite Function that adds a user to users collection
